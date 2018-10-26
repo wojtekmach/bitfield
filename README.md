@@ -3,64 +3,66 @@
 ## Example
 
 ```elixir
-defmodule Status do
+defmodule Chmod do
   use Bitfield,
-    a: 0b001,
-    b: 0b010,
-    c: 0b100
+    r: 0b100,
+    w: 0b010,
+    x: 0b001
 end
 
-iex> Status.new([:a]).value
-0b001
-iex> Status.new([:b]).value
-0b010
-iex> Status.new([:a, :b]).value
-0b011
-iex> Status.new(0b011)
-#Status<[:a, :b]>
-
-iex> Status.put(Status.new([:a, :b]), :c)
-#Status<[:a, :b, :c]>
-
-iex> Status.has?(Status.new([:a, :b]), :a)
+iex> Chmod.new([:r]).value
+4
+iex> Chmod.new([:w]).value
+2
+iex> Chmod.new([:r, :w, :x]).value
+7
+iex> Chmod.new(0b001)
+#Chmod<[:x]>
+iex> Chmod.new(0b111)
+#Chmod<[:r, :w, :x]>
+iex> Chmod.new([:w, :r]) |> Chmod.put(:x)
+#Chmod<[:r, :w, :x]>
+iex> Chmod.new([:w, :r]) |> Chmod.has?(:r)
 true
-iex> Status.has?(Status.new([:a, :b]), :c)
+iex> Chmod.new([:w, :r]) |> Chmod.has?(:x)
 false
-iex> Status.has?(Status.new([:a, :b]), :bad)
-** (FunctionClauseError) no function clause matching in Status.has?/2
+iex> Chmod.new([:w, :r]) |> Chmod.has?(:execute)
+** (FunctionClauseError) no function clause matching in Chmod.has?/2
 
-    The following arguments were given to Status.has?/2:
+    The following arguments were given to Chmod.has?/2:
 
         # 1
-        #Status<[:a]>
+        #Chmod<[:r, :w]>
 
         # 2
-        :bad
+        :execute
 
     Attempted function clauses (showing 3 out of 3):
 
-        def has?(%Status{value: value}, :a)
-        def has?(%Status{value: value}, :b)
-        def has?(%Status{value: value}, :c)
+        def has?(%Chmod{value: value}, :r)
+        def has?(%Chmod{value: value}, :w)
+        def has?(%Chmod{value: value}, :x)
+
+    (bitfield) lib/chmod.ex:2: Chmod.has?/2
 ```
 
 ```
-iex> h Status
+iex> h Chmod
 
-Status bitfield.
+Chmod bitfield.
 
 Available fields:
 
-  • :a (0b001)
-  • :b (0b010)
-  • :c (0b100)
+  • :r (0b100)
+  • :w (0b010)
+  • :x (0b001)
 ```
 
 ```elixir
-iex> t Status
-@type field() :: :a | :b | :c
+iex> t Chmod
+@type field() :: :r | :w | :x
 
 @type value() :: non_neg_integer()
 
-@type t() :: %Status{value: value()}
+@type t() :: %Chmod{value: value()}
 ```
