@@ -42,8 +42,6 @@ iex> Chmod.new([:w, :r]) |> Chmod.has?(:execute)
         def has?(%Chmod{value: value}, :r)
         def has?(%Chmod{value: value}, :w)
         def has?(%Chmod{value: value}, :x)
-
-    (bitfield) lib/chmod.ex:2: Chmod.has?/2
 ```
 
 ```
