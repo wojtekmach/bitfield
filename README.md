@@ -16,12 +16,15 @@ iex> Chmod.new([:w]).value
 2
 iex> Chmod.new([:r, :w, :x]).value
 7
+
 iex> Chmod.new(0b001)
 #Chmod<[:x]>
 iex> Chmod.new(0b111)
 #Chmod<[:r, :w, :x]>
+
 iex> Chmod.new([:w, :r]) |> Chmod.put(:x)
 #Chmod<[:r, :w, :x]>
+
 iex> Chmod.new([:w, :r]) |> Chmod.has?(:r)
 true
 iex> Chmod.new([:w, :r]) |> Chmod.has?(:x)
